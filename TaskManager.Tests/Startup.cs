@@ -9,7 +9,7 @@ namespace TaskManager.Tests;
 
 public class Startup : IClassFixture<WebApplicationFactory<Program>>
 {
-    private WebApplicationFactory<Program> clientFactory = new();
+    readonly WebApplicationFactory<Program> clientFactory = new();
     readonly string taskEndpoint = "/task";
     [Fact]
     public async Task ThereShouldBeAGetAllTasksEndpoint()
