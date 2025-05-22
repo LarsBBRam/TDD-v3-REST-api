@@ -26,4 +26,29 @@ public class CreateTaskFlow : IClassFixture<WebApplicationFactory<Program>>
         result.EnsureSuccessStatusCode();
     }
 
+
+    [Fact]
+    public async Task AfterCreatingTask_AllTaskListContainsIt()
+    {
+
+        //Arrange
+        var client = clientFactory.CreateClient();
+        var payload = new TaskModel
+        {
+            Title = "Feed Shark"
+        };
+
+        //Act
+        await client.PostAsJsonAsync(taskEndpoint, payload);
+        var response = await client.GetFromJsonAsync<List<TaskModel>>(taskEndpoint);
+
+        //Assert that we can concert the response from JSON
+        Assert.NotNull(response);
+
+        var result = response.Find(task => task.Title == payload.Title);
+
+        //Assert
+        Assert.NotNull(result);
+        Assert.Equivalent(payload.Title, result.Title);
+    }
 }
